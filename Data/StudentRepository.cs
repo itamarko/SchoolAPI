@@ -11,7 +11,14 @@ namespace SchoolAPI.Data
         {
             _schoolDbContext = schoolDbContext;
         }
-        public IEnumerable<Student> AllStudents => _schoolDbContext.Students.Include(s=>s.Courses);
+        public IEnumerable<Student> AllStudents => _schoolDbContext.Students.Include(s=>s.Department);
+
+        public Student Add(Student student)
+        {
+            _schoolDbContext.Students.Add(student);
+            _schoolDbContext.SaveChanges();
+            return student;
+        }
 
         public Student GetById(int id)
         {

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAPI.Data;
 using System;
+using System.Reflection;
 
 namespace SchoolAPI
 {
@@ -18,6 +19,8 @@ namespace SchoolAPI
 
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             // Add services to the container.
 
