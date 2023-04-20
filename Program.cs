@@ -19,6 +19,7 @@ namespace SchoolAPI
 
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<IFinalRepository, FinalRepository>();
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

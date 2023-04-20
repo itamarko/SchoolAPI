@@ -79,5 +79,37 @@ namespace SchoolAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Greska");
             }
         }
+
+        [HttpPut]
+        public ActionResult<StudentModel> Put(StudentModel student)
+        {
+            try
+            {
+                var studentDomainModel = _mapper.Map<Student>(student);
+                var updatedStudent = _studentRepository.Update(studentDomainModel);
+                var result = _mapper.Map<StudentModel>(updatedStudent);
+                
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Greska");
+            }
+        }
+
+        [HttpDelete("id")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                bool isSuccess = _studentRepository.Remove(id);
+
+                return Ok(isSuccess);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Greska");
+            }
+        }
     }
 }
