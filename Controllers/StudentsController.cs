@@ -7,7 +7,9 @@ using SchoolAPI.Models;
 
 namespace SchoolAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiversion}/[controller]")]
+    [ApiVersion("1.0")]
+    [ApiVersion("1.1")]
     [ApiController]
     public class StudentsController : ControllerBase
     {
@@ -63,6 +65,7 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPost]
+        [MapToApiVersion("1.0")]
         public ActionResult<StudentModel> Post(StudentModel student)
         {
             try
@@ -72,6 +75,25 @@ namespace SchoolAPI.Controllers
                 StudentModel result = _mapper.Map<StudentModel>(newStudentDM);
 
                 string location = _linkGenerator.GetPathByAction("Get", "Students", new { id = result.Id});
+                return Created(location, result);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Greska");
+            }
+        }
+
+        [HttpPost]
+        [MapToApiVersion("1.1")]
+        public ActionResult<StudentModel> NewPost(StudentModel student)
+        {
+            try
+            {
+                Student studentDomainModel = _mapper.Map<Student>(student);
+                var newStudentDM = _studentRepository.Add(studentDomainModel);
+                StudentModel result = _mapper.Map<StudentModel>(newStudentDM);
+
+                string location = _linkGenerator.GetPathByAction("Get", "Students", new { id = result.Id });
                 return Created(location, result);
             }
             catch (Exception ex)

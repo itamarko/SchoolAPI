@@ -9,6 +9,9 @@ namespace SchoolAPI.Data
         public FinalProfile()
         {
             this.CreateMap<Final, FinalModel>();
+            this.CreateMap<FinalModel, Final>();
+            this.CreateMap<Course, CourseModel>();
+
         }
     }
 }

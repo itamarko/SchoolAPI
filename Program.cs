@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using SchoolAPI.Data;
 using System;
@@ -24,6 +25,15 @@ namespace SchoolAPI
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             // Add services to the container.
+            builder.Services.AddApiVersioning(opt=>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 1);
+                opt.ReportApiVersions = true;
+                opt.ApiVersionReader = new UrlSegmentApiVersionReader();
+                //opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
+                //opt.ApiVersionReader = new QueryStringApiVersionReader("ver");
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

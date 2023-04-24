@@ -1,4 +1,5 @@
-﻿using SchoolAPI.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolAPI.Data.Entities;
 
 namespace SchoolAPI.Data
 {
@@ -23,12 +24,26 @@ namespace SchoolAPI.Data
 
         public Final GetById(int id)
         {
-            return _schoolDbContext.Finals.FirstOrDefault(f => f.Id == id);
+            return _schoolDbContext.Finals.Include(f => f.Course).FirstOrDefault(f => f.Id == id);
         }
 
         public IEnumerable<Final> GetFinalsByStudentId(int studentId)
         {
-            return _schoolDbContext.Finals.Where(f => f.StudentId == studentId);
+            return _schoolDbContext.Finals.Include(f => f.Course).Where(f => f.StudentId == studentId);
+        }
+
+        public Final Update(Final final)
+        {
+            Final updatedFinal = _schoolDbContext.Finals
+                .FirstOrDefault(f => f.Id == final.Id && f.StudentId == final.StudentId);
+            if (updatedFinal != null)
+            {
+                updatedFinal.Mark = final.Mark;
+                updatedFinal.Name = final.Name;
+                _schoolDbContext.SaveChanges();
+            }
+
+            return updatedFinal;
         }
     }
 }

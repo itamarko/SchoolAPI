@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAPI.Data;
+using SchoolAPI.Data.Entities;
 using SchoolAPI.Models;
 using System.Collections.Generic;
 
@@ -52,6 +53,47 @@ namespace SchoolAPI.Controllers
                 {
                     result = _mapper.Map<FinalModel>(finalDM);
                 }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Greska");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<FinalModel> Post(int studentId, FinalModel final)
+        {
+            try
+            {
+                FinalModel result = null;
+
+                Final finalDM = _mapper.Map<Final>(final);
+                finalDM.StudentId = studentId;
+                Final finalResult = _finalRepository.Add(finalDM);
+                result = _mapper.Map<FinalModel>(finalResult);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Greska");
+            }
+        }
+
+        [HttpPut]
+        public ActionResult<FinalModel> Put (int studentId, int id, FinalModel final)
+        {
+            try
+            {
+                FinalModel result = null;
+
+                Final finalDM = _mapper.Map<Final>(final);
+                finalDM.StudentId = studentId;
+                finalDM.Id = id;
+                var finalDMResult = _finalRepository.Update(finalDM);
+                result = _mapper.Map<FinalModel>(finalDMResult);
 
                 return result;
             }
